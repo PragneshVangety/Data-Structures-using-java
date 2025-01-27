@@ -1,0 +1,666 @@
+8.1 DOUBLY LINKED LIST
+
+class Node {
+    int data;
+    Node prev;
+    Node next;
+
+    Node(int data) {
+        this.data = data;
+        this.prev = null;
+        this.next = null;
+    }
+}
+class DoublyLinkedList {
+    private Node head = null;
+    private Node tail = null;
+
+    // 1. Insertion at the Beginning
+    public void insertAtBeginning(int data) {
+        Node newNode = new Node(data);
+        if (head == null) { 
+            head = tail = newNode;
+        } else {
+            newNode.next = head;
+            head.prev = newNode;
+            head = newNode;
+        }
+    }
+
+    // 2. Insertion at the End
+    public void insertAtEnd(int data) {
+        Node newNode = new Node(data);
+        if (tail == null) { 
+            head = tail = newNode;
+        } else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
+    }
+
+    // 3. Insertion in Between Nodes
+    public void insertAfter(int afterData, int data) {
+        Node current = head;
+        while (current != null && current.data != afterData) {
+            current = current.next;
+        }
+        if (current == null) {
+            System.out.println("Node with data " + afterData + " not found.");
+            return;
+        }
+        Node newNode = new Node(data);
+        newNode.next = current.next;
+        newNode.prev = current;
+
+        if (current.next != null) {
+            current.next.prev = newNode;
+        } else {
+            tail = newNode; 
+        }
+        current.next = newNode;
+    }
+
+    // 4. Deletion at the Beginning
+    public void deleteAtBeginning() {
+        if (head == null) { 
+            System.out.println("List is empty.");
+            return;
+        }
+        if (head == tail) { 
+            head = tail = null;
+        } else {
+            head = head.next;
+            head.prev = null;
+        }
+    }
+
+    // 5. Deletion at the End
+    public void deleteAtEnd() {
+        if (tail == null) { 
+            System.out.println("List is empty.");
+            return;
+        }
+        if (head == tail) { 
+            head = tail = null;
+        } else {
+            tail = tail.prev;
+            tail.next = null;
+        }
+    }
+
+    // 6. Deletion in Between Nodes
+    public void deleteNode(int data) {
+        Node current = head;
+        while (current != null && current.data != data) {
+            current = current.next;
+        }
+        if (current == null) {
+            System.out.println("Node with data " + data + " not found.");
+            return;
+        }
+        if (current == head) {
+            deleteAtBeginning();
+        } else if (current == tail) {
+            deleteAtEnd();
+        } else {
+            current.prev.next = current.next;
+            current.next.prev = current.prev;
+        }
+    }
+
+    // 7. Traversal (Forward)
+    public void traverseForward() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+        Node current = head;
+        while (current != null) {
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+
+    // Traversal (Backward)
+    public void traverseBackward() {
+        if (tail == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+        Node current = tail;
+        while (current != null) {
+            System.out.print(current.data + " ");
+            current = current.prev;
+        }
+        System.out.println();
+    }
+}
+public class Doubly_Linked_List {
+    public static void main(String[] args) {
+        DoublyLinkedList dll = new DoublyLinkedList();
+
+        // Insertions
+        dll.insertAtBeginning(10);
+        dll.insertAtBeginning(5);
+        dll.insertAtEnd(20);
+        dll.insertAtEnd(25);
+        dll.insertAfter(10, 15);
+
+        System.out.println("Doubly Linked List (Forward Traversal):");
+        dll.traverseForward();
+
+        System.out.println("Doubly Linked List (Backward Traversal):");
+        dll.traverseBackward();
+
+        // Deletions
+        dll.deleteAtBeginning();
+        dll.deleteAtEnd();
+        dll.deleteNode(15);
+
+        System.out.println("Doubly Linked List after deletions (Forward Traversal):");
+        dll.traverseForward();
+
+        System.out.println("Doubly Linked List after deletions (Backward Traversal):");
+        dll.traverseBackward();
+    }
+}
+================================================
+8.2 CIRCULAR LINKED LIST
+
+class Node {
+    int data;
+    Node next;
+
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+class CircularLinkedList {
+    private Node head = null;
+    private Node tail = null;
+
+    // 1. Insertion at the Beginning
+    public void insertAtBeginning(int data) {
+        Node newNode = new Node(data);
+        if (head == null) { 
+            head = newNode;
+            tail = newNode;
+            tail.next = head; 
+        } else {
+            newNode.next = head;
+            tail.next = newNode; 
+            head = newNode; 
+        }
+    }
+
+    // 2. Insertion at the End
+    public void insertAtEnd(int data) {
+        Node newNode = new Node(data);
+        if (head == null) { 
+            head = newNode;
+            tail = newNode;
+            tail.next = head; 
+        } else {
+            tail.next = newNode; 
+            newNode.next = head; 
+            tail = newNode; 
+        }
+    }
+
+    // 3. Insertion After a Node
+	
+    public void insertAfter(int afterData, int data) {
+		if (head == null) {
+        System.out.println("List is empty.");
+        return;
+    }
+
+    Node current = head;
+    while (true) {
+        if (current.data == afterData) {
+            Node newNode = new Node(data);
+            newNode.next = current.next;
+            current.next = newNode;
+
+            if (current == tail) {
+                tail = newNode;
+            }
+            return;
+        }
+        current = current.next;
+        if (current == head) { 
+            break;
+        }
+    }
+    System.out.println("Node with data " + afterData + " not found.");
+}
+	   /*Node current = head;
+        do {
+            if (current.data == afterData) {
+                Node newNode = new Node(data);
+                newNode.next = current.next;
+                current.next = newNode;
+
+                if (current == tail) { 
+                    tail = newNode;
+                }
+                return;
+            }
+            current = current.next;
+        } while (current != head);
+        System.out.println("Node with data " + afterData + " not found.");
+    }*/
+
+    // 4. Deletion at the Beginning
+    public void deleteAtBeginning() {
+        if (head == null) { 
+            System.out.println("List is empty.");
+            return;
+        }
+        if (head == tail) { 
+            head = null;
+            tail = null;
+        } else {
+            head = head.next; 
+            tail.next = head; 
+        }
+    }
+
+    // 5. Deletion at the End
+    public void deleteAtEnd() {
+        if (head == null) { 
+            System.out.println("List is empty.");
+            return;
+        }
+        if (head == tail) { 
+            head = null;
+            tail = null;
+        } else {
+            Node current = head;
+            while (current.next != tail) {
+                current = current.next;
+            }
+            current.next = head; 
+            tail = current; 
+        }
+    }
+
+    // 6. Deletion After a Node
+    public void deleteAfter(int afterData) {
+        Node current = head;
+        do {
+            if (current.data == afterData) {
+                if (current.next == head) { 
+                    System.out.println("No node to delete after " + afterData);
+                    return;
+                }
+                current.next = current.next.next;
+                if (current.next == head) { 
+                    tail = current;
+                }
+                return;
+            }
+            current = current.next;
+        } while (current != head);
+        System.out.println("Node with data " + afterData + " not found.");
+    }
+
+    // 7. Traversal
+    public void traverse() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+        Node current = head;
+        do {
+            System.out.print(current.data + " ");
+            current = current.next;
+        } while (current != head);
+        System.out.println();
+    }
+}
+public class Circular_Linked_List {
+    public static void main(String[] args) {
+        CircularLinkedList cll = new CircularLinkedList();
+
+        // Insertions
+        cll.insertAtBeginning(10);
+        cll.insertAtBeginning(5);
+        cll.insertAtEnd(20);
+        cll.insertAtEnd(25);
+        cll.insertAfter(10, 15);
+
+        System.out.println("Circular Linked List after insertions:");
+        cll.traverse();
+
+        // Deletions
+        cll.deleteAtBeginning();
+        cll.deleteAtEnd();
+        cll.deleteAfter(10);
+
+        System.out.println("Circular Linked List after deletions:");
+        cll.traverse();
+    }
+}
+====================================================
+8.3 DOUBLY CIRCULAR LINKED LIST
+
+class Node {
+    int data;
+    Node next;
+    Node prev;
+
+    Node(int data) {
+        this.data = data;
+        this.prev = null;
+        this.next = null;
+    }
+}
+class DoublyCircularLinkedList {
+    Node head;
+
+    public void insertAtEnd(int data) {
+        Node newNode = new Node(data);
+
+        if (head == null) {
+            head = newNode;
+            head.next = head;
+            head.prev = head;
+        } else {
+            Node last = head.prev;
+
+            last.next = newNode;
+            newNode.prev = last;
+            newNode.next = head;
+            head.prev = newNode;
+        }
+    }
+
+    public void display() {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+
+        Node current = head;
+        do {
+            System.out.print(current.data + " ");
+            current = current.next;
+        } while (current != head);
+        System.out.println();
+    }
+
+    public static Node mergeLists(Node head1, Node head2) {
+        
+        if (head1 == null) return head2;
+        if (head2 == null) return head1;
+
+        Node last1 = head1.prev;
+        Node last2 = head2.prev;
+
+        Node lastNode = (last1.data < last2.data) ? last2 : last1;
+
+        last1.next = null;
+        last2.next = null;
+
+        Node finalHead = mergeSortedDoublyLists(head1, head2);
+
+        finalHead.prev = lastNode;
+        lastNode.next = finalHead;
+
+        return finalHead;
+    }
+
+    private static Node mergeSortedDoublyLists(Node head1, Node head2) {
+        Node dummy = new Node(0); 
+        Node tail = dummy;
+
+        while (head1 != null && head2 != null) {
+            if (head1.data <= head2.data) {
+                tail.next = head1;
+                head1.prev = tail;
+                head1 = head1.next;
+            } else {
+                tail.next = head2;
+                head2.prev = tail;
+                head2 = head2.next;
+            }
+            tail = tail.next;
+        }
+
+        if (head1 != null) {
+            tail.next = head1;
+            head1.prev = tail;
+        }
+        if (head2 != null) {
+            tail.next = head2;
+            head2.prev = tail;
+        }
+
+        Node mergedHead = dummy.next;
+        if (mergedHead != null) {
+            mergedHead.prev = null;
+        }
+        return mergedHead;
+    }
+}
+public class Merge2SortedDoublyCLL {
+    public static void main(String[] args) {
+        DoublyCircularLinkedList list1 = new DoublyCircularLinkedList();
+        DoublyCircularLinkedList list2 = new DoublyCircularLinkedList();
+
+        // Inserting data into List 1
+        list1.insertAtEnd(1);
+        list1.insertAtEnd(3);
+        list1.insertAtEnd(5);
+        System.out.println("List 1:");
+        list1.display();
+
+        // Inserting data into List 2
+        list2.insertAtEnd(2);
+        list2.insertAtEnd(4);
+        list2.insertAtEnd(6);
+        System.out.println("List 2:");
+        list2.display();
+
+        // Merging the lists
+        Node mergedHead = DoublyCircularLinkedList.mergeLists(list1.head, list2.head);
+
+        System.out.println("Merged List:");
+        DoublyCircularLinkedList mergedList = new DoublyCircularLinkedList();
+        mergedList.head = mergedHead;
+        mergedList.display();
+    }
+}
+===================================================
+8.4  Delete Occurrence In Doubly Linked List
+
+class Node {
+    int data;
+    Node next, prev;
+
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+        this.prev = null;
+    }
+}
+public class DeleteOccurrenceInDoublyLinkedList {
+
+    static Node deleteNode(Node head, Node delNode) {
+        if (head == delNode) {
+            head = delNode.next;
+        }
+
+        if (delNode.next != null) {
+            delNode.next.prev = delNode.prev;
+        }
+
+        if (delNode.prev != null) {
+            delNode.prev.next = delNode.next;
+        }
+
+        delNode = null;
+
+        return head;
+    }
+
+    static Node deleteAllOccurOfX(Node head, int x) {
+        if (head == null) {
+            return null;
+        }
+
+        Node current = head;
+
+        while (current != null) {
+            Node next = current.next; 
+            if (current.data == x) {
+                head = deleteNode(head, current); 
+            }
+            current = next; 
+        }
+
+        return head;
+    }
+
+    
+    static void printList(Node head) {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+
+        Node current = head;
+        while (current != null) {
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        // Creating the doubly linked list
+        Node head = new Node(2);
+        head.next = new Node(2);
+        head.next.prev = head;
+        head.next.next = new Node(10);
+        head.next.next.prev = head.next;
+        head.next.next.next = new Node(8);
+        head.next.next.next.prev = head.next.next;
+        head.next.next.next.next = new Node(4);
+        head.next.next.next.next.prev = head.next.next.next;
+        head.next.next.next.next.next = new Node(2);
+        head.next.next.next.next.next.prev = head.next.next.next.next;
+        head.next.next.next.next.next.next = new Node(5);
+        head.next.next.next.next.next.next.prev = head.next.next.next.next.next;
+        head.next.next.next.next.next.next.next = new Node(2);
+        head.next.next.next.next.next.next.next.prev = head.next.next.next.next.next.next;
+
+        System.out.println("Original List:");
+        printList(head);
+
+        int x = 2; 
+        head = deleteAllOccurOfX(head, x);
+
+        System.out.println("List after deleting all occurrences of " + x + ":");
+        printList(head);
+    }
+}
+===================================================
+8.5  Delete Node At Given Position
+
+class Node {
+    int data;
+    Node next, prev;
+
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+        this.prev = null;
+    }
+}
+public class DeleteNodeAtGivenPosition {
+
+    static Node deleteNode(Node head, Node del) {
+        if (del == null) {
+            return head;
+        }
+
+        if (head == del) {
+            head = del.next;
+        }
+
+        if (del.prev != null) {
+            del.prev.next = del.next;
+        }
+
+        if (del.next != null) {
+            del.next.prev = del.prev;
+        }
+
+        del = null;
+
+        return head;
+    }
+
+    static Node deleteNodeAtGivenPos(Node head, int n) {
+        if (head == null || n <= 0) {
+            return head;
+        }
+
+        Node current = head;
+
+        for (int i = 1; i < n && current != null; i++) {
+            current = current.next;
+        }
+
+        if (current == null) {
+            System.out.println("Position " + n + " is out of range.");
+            return head;
+        }
+
+        head = deleteNode(head, current);
+
+        return head;
+    }
+
+    static void printList(Node head) {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+
+        Node current = head;
+        while (current != null) {
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        // Create a doubly linked list
+        Node head = new Node(1);
+        head.next = new Node(2);
+        head.next.prev = head;
+        head.next.next = new Node(3);
+        head.next.next.prev = head.next;
+        head.next.next.next = new Node(4);
+        head.next.next.next.prev = head.next.next;
+        head.next.next.next.next = new Node(5);
+        head.next.next.next.next.prev = head.next.next.next;
+
+        System.out.println("Original List:");
+        printList(head);
+
+        int position = 2; 
+        head = deleteNodeAtGivenPos(head, position);
+
+        System.out.println("List after deleting node at position " + position + ":");
+        printList(head);
+    }
+}
+

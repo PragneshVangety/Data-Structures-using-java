@@ -1,0 +1,527 @@
+9.1 BINARY TREE DELETION
+
+class Node {
+    int data;
+    Node next, prev;
+
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+        this.prev = null;
+    }
+}
+public class DeleteNodeAtGivenPosition {
+
+    static Node deleteNode(Node head, Node del) {
+        if (del == null) {
+            return head;
+        }
+
+        if (head == del) {
+            head = del.next;
+        }
+
+        if (del.prev != null) {
+            del.prev.next = del.next;
+        }
+
+        if (del.next != null) {
+            del.next.prev = del.prev;
+        }
+
+        del = null;
+
+        return head;
+    }
+
+    static Node deleteNodeAtGivenPos(Node head, int n) {
+        if (head == null || n <= 0) {
+            return head;
+        }
+
+        Node current = head;
+
+        for (int i = 1; i < n && current != null; i++) {
+            current = current.next;
+        }
+
+        if (current == null) {
+            System.out.println("Position " + n + " is out of range.");
+            return head;
+        }
+
+        head = deleteNode(head, current);
+
+        return head;
+    }
+
+    static void printList(Node head) {
+        if (head == null) {
+            System.out.println("List is empty.");
+            return;
+        }
+
+        Node current = head;
+        while (current != null) {
+            System.out.print(current.data + " ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        // Create a doubly linked list
+        Node head = new Node(1);
+        head.next = new Node(2);
+        head.next.prev = head;
+        head.next.next = new Node(3);
+        head.next.next.prev = head.next;
+        head.next.next.next = new Node(4);
+        head.next.next.next.prev = head.next.next;
+        head.next.next.next.next = new Node(5);
+        head.next.next.next.next.prev = head.next.next.next;
+
+        System.out.println("Original List:");
+        printList(head);
+
+        int position = 2; 
+        head = deleteNodeAtGivenPos(head, position);
+
+        System.out.println("List after deleting node at position " + position + ":");
+        printList(head);
+    }
+}
+===================================================
+9.2  LIST TO BINARY TREE
+
+import java.util.*;
+
+class TreeNode {
+    int data;
+    TreeNode left, right;
+
+    public TreeNode(int data) {
+        this.data = data;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+public class ListToBinaryTree {
+    
+    public static TreeNode list2BinaryTree(List<Integer> list) {
+        if (list == null || list.isEmpty()) {
+            return null; 
+        }
+		TreeNode root = new TreeNode(list.get(0));
+		Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+		int i = 1; 
+		while (!queue.isEmpty() && i < list.size()) {
+            TreeNode current = queue.poll();
+		if (i < list.size()) {
+                current.left = new TreeNode(list.get(i));
+				i++;
+                queue.add(current.left);
+            }
+		if (i < list.size()) {
+                current.right = new TreeNode(list.get(i));
+				i++;
+                queue.add(current.right);
+            }
+        }
+
+        return root;
+    }
+
+    public static void inOrderTraversal(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        inOrderTraversal(root.left);
+        System.out.print(root.data + " ");
+        inOrderTraversal(root.right);
+    }
+
+    public static void main(String[] args) {
+        
+        List<Integer> list = Arrays.asList(1, 2, 3, 4, 5, 6, 7);
+
+        TreeNode root = list2BinaryTree(list);
+
+        System.out.print("In-order Traversal of the Binary Tree: ");
+        inOrderTraversal(root);
+    }
+}
+===================================================
+9.3  BINARY TREE HEIGHT
+
+import java.util.*;
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int item) {
+        data = item;
+        left = right = null;
+    }
+}
+
+class BinaryTree {
+    
+    public int maxDepth(Node root) {
+        if (root == null) {
+            return 0;
+        }
+
+        int leftDepth = maxDepth(root.left);
+        int rightDepth = maxDepth(root.right);
+
+        return Math.max(leftDepth, rightDepth) + 1;
+    }
+    
+    
+}
+
+public class BinaryTreeHeight {
+    public static void main(String[] args) {
+        BinaryTree tree = new BinaryTree();
+        Node root = new Node(1);
+        root.left = new Node(2);
+        root.right = new Node(3);
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+        
+        System.out.println("Height of the tree: " + tree.maxDepth(root));
+
+        
+    }
+}
+=================================================
+9.4 INSERTION BINARY TREE LEVEL ORDER 
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int item) {
+        data = item;
+        left = right = null;
+    }
+}
+
+class BinaryTree {
+
+ 	public static Node buildTree(List<Integer> list) {
+        if (list == null || list.isEmpty()) return null;
+
+        Node root = new Node(list.get(0));
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+
+        int i = 1; 
+        while (!queue.isEmpty() && i < list.size()) {
+            Node current = queue.poll();
+
+            if (i < list.size() && list.get(i) != null) {
+                current.left = new Node(list.get(i));
+                queue.add(current.left);
+            }
+            i++;
+
+            if (i < list.size() && list.get(i) != null) {
+                current.right = new Node(list.get(i));
+                queue.add(current.right);
+            }
+            i++;
+        }
+        return root;
+    }
+
+    public void insertLevelOrder(Node root, int key) {
+        if (root == null) {
+            root = new Node(key);
+            return;
+        }
+        
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            Node current = queue.poll();
+
+            if (current.left == null) {
+                current.left = new Node(key);
+                return;
+            } else {
+                queue.add(current.left); 
+            }
+
+            if (current.right == null) {
+                current.right = new Node(key);
+                return;
+            } else {
+                queue.add(current.right);  
+            }
+        }
+    }
+
+    
+	
+	public void levelOrder(Node root) { 
+        if (root == null) return;  
+        Queue<Node> queue = new LinkedList<>();  
+        queue.add(root);  
+
+        while (!queue.isEmpty()) { 
+            Node current = queue.poll();  
+			System.out.print(current.data + " ");  
+			
+			if (current.left != null) queue.add(current.left); 
+            if (current.right != null) queue.add(current.right); 
+        }
+    }
+}
+
+public class Insertion_Binary_Tree_Level_Order {
+    public static void main(String[] args) {
+        List<Integer> treeList = new ArrayList<>();
+        treeList.add(50);
+        treeList.add(30);
+        treeList.add(70);
+        treeList.add(null);  
+        treeList.add(40);
+        treeList.add(60);
+        treeList.add(80);
+		BinaryTree tree = new BinaryTree();
+        Node root = tree.buildTree(treeList); 
+
+        System.out.println("Level Order Traversal:");
+        tree.levelOrder(root);  
+        System.out.println();
+		
+		System.out.println("After inserting 60:");
+        tree.insertLevelOrder(root, 100);
+		
+		System.out.println("Level Order Traversal:");
+        tree.levelOrder(root);  
+        System.out.println();
+    }
+}
+===============================================
+9.5 BINARY TREE TRAVERSAL
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int item) {
+        data = item;
+        left = right = null;
+    }
+}
+
+class BinaryTree {
+
+ 	public static Node buildTree(List<Integer> list) {
+        if (list == null || list.isEmpty()) return null;
+
+        Node root = new Node(list.get(0));
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+
+        int i = 1; 
+        while (!queue.isEmpty() && i < list.size()) {
+            Node current = queue.poll();
+
+            if (i < list.size() && list.get(i) != null) {
+                current.left = new Node(list.get(i));
+                queue.add(current.left);
+            }
+            i++;
+
+            if (i < list.size() && list.get(i) != null) {
+                current.right = new Node(list.get(i));
+                queue.add(current.right);
+            }
+            i++;
+        }
+        return root;
+    }
+
+    public void insertLevelOrder(Node root, int key) {
+        if (root == null) {
+            root = new Node(key);
+            return;
+        }
+        
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            Node current = queue.poll();
+
+            if (current.left == null) {
+                current.left = new Node(key);
+                return;
+            } else {
+                queue.add(current.left); 
+            }
+
+            if (current.right == null) {
+                current.right = new Node(key);
+                return;
+            } else {
+                queue.add(current.right);  
+            }
+        }
+    }
+
+    
+	
+	public void levelOrder(Node root) { 
+        if (root == null) return;  
+        Queue<Node> queue = new LinkedList<>();  
+        queue.add(root);  
+
+        while (!queue.isEmpty()) { 
+            Node current = queue.poll();  
+			System.out.print(current.data + " ");  
+			
+			if (current.left != null) queue.add(current.left); 
+            if (current.right != null) queue.add(current.right); 
+        }
+    }
+}
+
+public class Insertion_Binary_Tree_Level_Order {
+    public static void main(String[] args) {
+        List<Integer> treeList = new ArrayList<>();
+        treeList.add(50);
+        treeList.add(30);
+        treeList.add(70);
+        treeList.add(null);  
+        treeList.add(40);
+        treeList.add(60);
+        treeList.add(80);
+		BinaryTree tree = new BinaryTree();
+        Node root = tree.buildTree(treeList); 
+
+        System.out.println("Level Order Traversal:");
+        tree.levelOrder(root);  
+        System.out.println();
+		
+		System.out.println("After inserting 60:");
+        tree.insertLevelOrder(root, 100);
+		
+		System.out.println("Level Order Traversal:");
+        tree.levelOrder(root);  
+        System.out.println();
+    }
+}
+====================================================
+9.6  TREE BASIC TERMINOLOGIES 
+
+import java.util.*;
+
+class TreeNode {
+    int data;
+    TreeNode left, right;
+
+    public TreeNode(int data) {
+        this.data = data;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+public class TreeBasicTerminologies {
+	static void printChildren(TreeNode root) {
+        if (root == null) return;
+
+        System.out.print("Children of node " + root.data + ": ");
+        if (root.left != null) System.out.print(root.left.data + " ");
+        if (root.right != null) System.out.print(root.right.data);
+        System.out.println();
+    }
+    static void printLeafNodes(TreeNode root) {
+        if (root == null) return;
+
+        if (root.left == null && root.right == null) { 
+			System.out.print(root.data + " ");
+            return;
+        }
+
+        if (root.left != null) printLeafNodes(root.left);
+        if (root.right != null) printLeafNodes(root.right);
+    }
+
+    static void printDegrees(TreeNode root) {
+        if (root == null) return;
+
+        int degree = 0;
+        if (root.left != null) degree++;
+        if (root.right != null) degree++;
+
+        System.out.println("Node " + root.data + " has degree: " + degree);
+
+        if (root.left != null) printDegrees(root.left);
+        if (root.right != null) printDegrees(root.right);
+    }
+
+    public static void main(String[] args) {
+        List<Integer> list = Arrays.asList(0, 1, 2, 3, 4, null, 5);
+
+        TreeNode root = convertListToBinaryTree(list);
+
+        System.out.println("Tree Children:");
+        printChildren(root);
+        if (root.left != null) printChildren(root.left);
+        if (root.right != null) printChildren(root.right);
+
+        System.out.println("\nLeaf Nodes:");
+        printLeafNodes(root);
+        System.out.println();
+
+        System.out.println("\nDegrees of Nodes:");
+        printDegrees(root);
+    }
+
+    public static TreeNode convertListToBinaryTree(List<Integer> list) {
+        if (list == null || list.isEmpty()) return null;
+
+        TreeNode root = new TreeNode(list.get(0));
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+
+        int i = 1; 
+        while (!queue.isEmpty() && i < list.size()) {
+            TreeNode current = queue.poll();
+
+            if (i < list.size() && list.get(i) != null) {
+                current.left = new TreeNode(list.get(i));
+                queue.add(current.left);
+            }
+            i++;
+
+            if (i < list.size() && list.get(i) != null) {
+                current.right = new TreeNode(list.get(i));
+                queue.add(current.right);
+            }
+            i++;
+        }
+        return root;
+    }
+}
+
+

@@ -1,0 +1,238 @@
+5.1 IMPLIMENTATION OF STACK
+
+import java.util.Stack;
+
+public class Implementation_of_Stack {
+
+    public static void main(String[] args) {
+        Stack<Object> stack = new Stack<>();
+		stack.push(10);
+        stack.push("srikanth");
+        stack.push(30);
+		System.out.println("Popped element: " + stack.pop());
+		System.out.println("Top element: " + stack.peek());
+		System.out.println("Is stack empty? " + stack.isEmpty());
+		System.out.println("Stack size: " + stack.size());
+    }
+}
+===================================================
+5.2  Infix To Postfix Converter
+
+import java.util.*;
+
+class InfixToPostfixConverter {
+    
+    private static int precedence(char operator) {
+        switch (operator) {
+            case '+':
+            case '-':
+                return 1;
+            case '*':
+            case '/':
+                return 2;
+            case '^':
+                return 3; 
+            default:
+                return -1; 
+        }
+    }
+	public static void main(String[] args) {
+        String infix = "( ( D - Q ) * G + ( A / H ) ) - R";
+		StringBuilder postfix = new StringBuilder();
+        Stack<Character> stack = new Stack<>();
+		for (char c : infix.toCharArray()) {
+            if (Character.isLetterOrDigit(c)) {
+                postfix.append(c).append(' ');
+            }  
+            else if (c == '(') {
+                stack.push(c);
+            } 
+             else if (c == ')') {
+                while (!stack.isEmpty() && stack.peek() != '(') {
+                    postfix.append(stack.pop()).append(' ');
+                }
+                stack.pop(); 
+            } 
+            else if (c == '+' || c == '-' || c == '*' || c == '/' || c == '^') {
+                while (!stack.isEmpty() && precedence(stack.peek()) >= precedence(c)) {
+					postfix.append(stack.pop()).append(' ');
+                }
+                stack.push(c);
+            }
+        }
+		while (!stack.isEmpty()) {
+            postfix.append(stack.pop()).append(' ');
+        }
+
+        System.out.println( postfix.toString().trim());
+
+         
+    }
+}
+===================================================
+5.3 Balanced Parentheses Checker
+
+import java.util.*;
+class BalancedParenthesesChecker {
+    public static void main(String[] args) {
+        String expression = "{(a+b)*[c-d)}";
+		Stack<Character> stack = new Stack<>();
+		boolean isBalanced = true; 
+		for (char ch : expression.toCharArray()) {
+            if (ch == '{' || ch == '(' || ch == '[') {
+                stack.push(ch);
+            }
+            else if (ch == '}' || ch == ')' || ch == ']') {
+				if (stack.isEmpty()){
+					isBalanced = false; 
+					break;
+				}
+				char tem = stack.pop();
+                if (!(tem == '(' && ch == ')') && !(tem == '[' && ch == ']') && !(tem == '{' && ch == '}')) {
+                    isBalanced = false;
+					break;
+				}
+            }
+        }
+		if (!stack.isEmpty()) {
+            isBalanced = false; 
+        }
+		System.out.println(isBalanced);
+    }
+}
+=================================================
+5.4 Stack Reversal
+
+import java.util.*;
+
+public class StackReversal {
+	
+	public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+		String[] input = scanner.nextLine().split(" ");
+		Stack<Integer> stack = new Stack<>();
+		Stack<Integer> result = new Stack<>();
+		    
+        for (String s : input) {
+            stack.push(Integer.parseInt(s));
+        }
+		int n = stack.size();
+		for (int i = 0; i < n; i++){
+			result.push(stack.pop());
+		}
+        for (int i = 0; i < n; i++) {
+            System.out.print(result.get(i) + " ");
+        }
+        
+        scanner.close();
+    }
+	
+   
+}
+===================================================
+5.5 Postfix Evaluator
+
+import java.util.*;
+class PostfixEvaluator{
+	public static void main(String[] args){
+		String expression = "2 3 1 * + 9 -"; 
+		
+		Stack<Integer> stack = new Stack<>();
+		
+		String[] tokens = expression.split(" ");
+		
+		for (String token : tokens) {
+            if (token.equals("+") ||token.equals("-") ||token.equals("*") ||token.equals("/")) {
+                int operand2 = stack.pop(); 
+                int operand1 = stack.pop();
+				switch (token) {
+					case "+":
+						stack.push( operand1 + operand2);
+						break;
+					case "-":
+						stack.push( operand1 - operand2);
+						break;
+					case "*":
+						stack.push( operand1 * operand2);
+						break;
+					case "/":
+						stack.push( operand1 / operand2);
+						break;
+					default:
+						System.out.println("Invalid operator");
+				}				
+            } 
+			else {
+                stack.push(Integer.parseInt(token));
+            }
+        }
+        System.out.println( stack.pop());
+    }
+}
+=====================================================
+5.6 Array Stack
+
+public class ArrayStack {
+    int[] stack;
+    int top;
+    int capacity;
+
+    public ArrayStack(int size) {
+        capacity = size;
+        stack = new int[capacity];
+        top = 0; 
+    }
+	public void push(int value) {
+        if (top == capacity) { 
+            System.out.println("Stack Overflow");
+        } else {
+            stack[top] = value;
+            top++;
+            System.out.println(value + " pushed to stack");
+        }
+    }
+	public int pop() {
+        if (top == 0) { 
+            System.out.println("Stack Underflow");
+            return -1;
+        } else {
+            top--;
+            return stack[top];
+        }
+    }
+	public int peek() {
+        if (top == 0) {
+            System.out.println("Stack is empty");
+            return -1;
+        } else {
+            return stack[top - 1];
+        }
+    }
+	public boolean isEmpty() {
+        return top == 0;
+    }
+	public int size() {
+        return top;
+    }
+	public static void main(String[] args) {
+        ArrayStack stack = new ArrayStack(5); 
+		stack.push(10);
+        stack.push(20);
+        stack.push(30);
+
+        System.out.println("Top element is: " + stack.peek());
+
+        System.out.println(stack.pop() + " popped from stack");
+
+        System.out.println("Current size of stack is: " + stack.size());
+
+        if (stack.isEmpty()) {
+            System.out.println("Stack is empty");
+        } else {
+            System.out.println("Stack is not empty");
+        }
+    }
+}
+
+ 
+ 
